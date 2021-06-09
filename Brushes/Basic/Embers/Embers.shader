@@ -44,7 +44,7 @@ Category {
       #include "UnityCG.cginc"
       #include "../../../Shaders/Include/Brush.cginc"
       #include "../../../Shaders/Include/Particles.cginc"
-      #include "../../../ThirdParty/Noise/Shaders/Noise.cginc"
+      #include "Assets/ThirdParty/Noise/Shaders/Noise.cginc"
 
       sampler2D _MainTex;
       fixed4 _TintColor;
@@ -82,7 +82,8 @@ Category {
         float fft = (tex2Dlod(_FFTTex, float4(pos.y,0,0,0)).b)*2 + .1;
         dispVec.y += fft;
 #endif
-        return dispVec * kDecimetersToWorldUnits;
+        // Allow scaling to affect particle speed and distance in toolkit
+        return dispVec * kDecimetersToWorldUnits  * length(unity_ObjectToWorld[0].xyz);
       }
 
       v2f vert (ParticleVertexWithSpread_t v) {
